@@ -1,0 +1,12 @@
+TARGETNAME=SkillSys
+TARGETTYPE=DRIVER
+TARGETPATH=bin\obj\
+
+DDKROOT=$(_NTDRIVE)$(_NTROOT)
+
+INCLUDE=$(BASEDIR)\inc;\
+	$(BASEDIR)\inc\ddk;\
+	$(BASEDIR)\inc\api;\
+	$(BASEDIR)\inc\crt;
+
+SOURCES=skillsys.c\
