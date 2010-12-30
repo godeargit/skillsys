@@ -27,7 +27,7 @@ PVOID *MappedSystemCallTable;
 
 #define SYSCALL_INDEX(_Function) *(PULONG)((PUCHAR)_Function + 1)
 
-#define HOOK_SYSCALL(_Function, _Hook, _Orig) _Orig = (PVOID)InterlockedExchange((PLONG) &MappedSystemCallTable[SYSCALL_INDEX(_Function)], (LONG) _Hook)
+#define HOOK_SYSCALL(_Function, _Hook, _Orig) _Orig= (PVOID)InterlockedExchange((PLONG) &MappedSystemCallTable[SYSCALL_INDEX(_Function)], (LONG) _Hook)
 
 #define UNHOOK_SYSCALL(_Function, _Hook, _Orig) InterlockedExchange((PLONG) &MappedSystemCallTable[SYSCALL_INDEX(_Function)], (LONG) _Orig)
 ///////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ typedef NTSTATUS (*ZWOPENPROCESS)(OUT PHANDLE ProcessHandle,
 	IN POBJECT_ATTRIBUTES ObjectAttributes,
 	IN PCLIENT_ID ClientId OPTIONAL);
 
-ZWOPENPROCESS OldZwOpenProcess = NULL;
+ZWOPENPROCESS OldZwOpenProcess= NULL;
 
 NTSTATUS NewZwOpenProcess(OUT PHANDLE ProcessHandle,IN ACCESS_MASK DesiredAccess,IN POBJECT_ATTRIBUTES ObjectAttributes,IN PCLIENT_ID ClientId OPTIONAL)
 {
@@ -57,7 +57,7 @@ NTSTATUS NewZwOpenProcess(OUT PHANDLE ProcessHandle,IN ACCESS_MASK DesiredAccess
 #pragma endregion
 
 #pragma region ZwAllocateLocallyUniqueId
-ZWALLOCATELOCALLYUNIQUEID OldZwAllocateLocallyUniqueId = NULL;
+ZWALLOCATELOCALLYUNIQUEID OldZwAllocateLocallyUniqueId= NULL;
 
 NTSTATUS  NewZwAllocateLocallyUniqueId( OUT PLUID  LUID){
 	SeeUser();
@@ -68,10 +68,9 @@ NTSTATUS  NewZwAllocateLocallyUniqueId( OUT PLUID  LUID){
 
 #pragma region ZwAllocateVirtualMemory
 
-ZWALLOCATEVIRTUALMEMORY OldZwAllocateVirtualMemory = NULL;
+ZWALLOCATEVIRTUALMEMORY OldZwAllocateVirtualMemory= NULL;
 
-NTSTATUS NewZwAllocateVirtualMemory(__in HANDLE  ProcessHandle, __inout PVOID  *BaseAddress, __in ULONG_PTR  ZeroBits, __inout PSIZE_T  RegionSize, __in ULONG  AllocationType, __in ULONG  Protect)
-{
+NTSTATUS NewZwAllocateVirtualMemory(__in HANDLE  ProcessHandle, __inout PVOID  *BaseAddress, __in ULONG_PTR  ZeroBits, __inout PSIZE_T  RegionSize, __in ULONG  AllocationType, __in ULONG  Protect){
 	SeeUser();
 	DbgPrint("ZwAllocateVirtualMemory\n");
 	return OldZwAllocateVirtualMemory(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect);
@@ -81,7 +80,7 @@ NTSTATUS NewZwAllocateVirtualMemory(__in HANDLE  ProcessHandle, __inout PVOID  *
 
 #pragma region ZwClose
 
-ZWCLOSE OldZwClose = NULL;
+ZWCLOSE OldZwClose= NULL;
 
 NTSTATUS NewZwClose(IN HANDLE  Handle)
 {
@@ -99,24 +98,21 @@ NTSTATUS
   NewZwCommitComplete(
     __in HANDLE  EnlistmentHandle,
     __in_opt PLARGE_INTEGER  TmVirtualClock
-    )
-{
+    ){
 	SeeUser();
 	DbgPrint("ZwCommitComplete\n");
 	return OldZwCommitComplete(EnlistmentHandle, TmVirtualClock);
 }
-
 #pragma endregion
 
 #pragma region ZwCommitEnlistment
-ZWCOMMITENLISTMENT OldZwCommitEnlistment = NULL;
+ZWCOMMITENLISTMENT OldZwCommitEnlistment= NULL;
 
 NTSTATUS
   NewZwCommitEnlistment (
     __in HANDLE  EnlistmentHandle,
     __in_opt PLARGE_INTEGER  TmVirtualClock
-    )
-{
+    ){
 	SeeUser();
 	DbgPrint("ZwCommitEnlistment\n");
 	return OldZwCommitEnlistment(EnlistmentHandle, TmVirtualClock);
@@ -125,7 +121,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwCommitTransactio;
-ZWCOMMITTRANSACTION OldZwCommitTransaction = NULL;
+ZWCOMMITTRANSACTION OldZwCommitTransaction= NULL;
 
 NTSTATUS 
   NewZwCommitTransaction(
@@ -140,8 +136,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwCreateDirectoryObject
-
-ZWCREATEDIRECTORYOBJECT OldZwCreateDirectoryObject = NULL;
+ZWCREATEDIRECTORYOBJECT OldZwCreateDirectoryObject= NULL;
 
 NTSTATUS 
   NewZwCreateDirectoryObject(
@@ -154,12 +149,10 @@ NTSTATUS
 	DbgPrint("ZwCreateDirectoryObject\n");
 	return OldZwCreateDirectoryObject(DirectoryHandle, DesiredAccess, ObjectAttributes);
 }
-
 #pragma endregion
 
 #pragma region ZwCreateEnlistment
-
-ZWCREATEENLISTMENT OldZwCreateEnlistment = NULL;
+ZWCREATEENLISTMENT OldZwCreateEnlistment= NULL;
 
 NTSTATUS
   NewZwCreateEnlistment (
@@ -191,7 +184,7 @@ NTSTATUS
 
 #pragma region ZwCreateEvent
 
-ZWCREATEEVENT OldZwCreateEvent = NULL;
+ZWCREATEEVENT OldZwCreateEvent= NULL;
 
 NTSTATUS
   NewZwCreateEvent(
@@ -217,7 +210,7 @@ NTSTATUS
 
 #pragma region ZwCreateFile
 
-ZWCREATEFILE OldZwCreateFile = NULL;
+ZWCREATEFILE OldZwCreateFile= NULL;
 
 NTSTATUS NewZwCreateFile(
     __out PHANDLE  FileHandle,
@@ -254,7 +247,7 @@ NTSTATUS NewZwCreateFile(
 #pragma endregion
 
 #pragma region ZwCreateKey
-ZWCREATEKEY OldZwCreateKey = NULL;
+ZWCREATEKEY OldZwCreateKey= NULL;
 
 NTSTATUS NewZwCreateKey(
     OUT PHANDLE  KeyHandle,
@@ -283,7 +276,7 @@ NTSTATUS NewZwCreateKey(
 #pragma endregion
 
 #pragma region ZwCreateKeyTransacted
-ZWCREATEKEYTRANSACTED OldZwCreateKeyTransacted = NULL;
+ZWCREATEKEYTRANSACTED OldZwCreateKeyTransacted= NULL;
 
 NTSTATUS
   NewZwCreateKeyTransacted(
@@ -315,7 +308,7 @@ NTSTATUS
 
 #pragma region ZwCreateResourceManager
 
-ZWCREATERESOURCEMANAGER OldZwCreateResourceManager = NULL;
+ZWCREATERESOURCEMANAGER OldZwCreateResourceManager= NULL;
 
 
 NTSTATUS
@@ -345,7 +338,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwCreateSection
-ZWCREATESECTION OldZwCreateSection = NULL;
+ZWCREATESECTION OldZwCreateSection= NULL;
 
 NTSTATUS 
   NewZwCreateSection(
@@ -374,7 +367,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwCreateTransaction
-ZWCREATETRANSACTION OldZwCreateTransaction = NULL;
+ZWCREATETRANSACTION OldZwCreateTransaction= NULL;
 
 NTSTATUS
   NewZwCreateTransaction (
@@ -420,7 +413,7 @@ NTSTATUS
 
 #pragma region ZwCreateTransactionManager
 
-DEFZwCreateTransactionManager OldZwCreateTransactionManager = NULL;
+DEFZwCreateTransactionManager OldZwCreateTransactionManager= NULL;
 
 NTSTATUS
    NewZwCreateTransactionManager(
@@ -472,7 +465,7 @@ The ZwCurrentThread macro returns a handle to the current thread.
 
 #pragma region ZwDeleteFile
 
-DEFZwDeleteFile OldZwDeleteFile = NULL;
+DEFZwDeleteFile OldZwDeleteFile= NULL;
 
 NTSTATUS
   NewZwDeleteFile(
@@ -489,7 +482,7 @@ NTSTATUS
 
 #pragma region ZwDeleteKey
 
-DEFZwDeleteKey OldZwDeleteKey = NULL;
+DEFZwDeleteKey OldZwDeleteKey= NULL;
 
 NTSTATUS 
   NewZwDeleteKey(
@@ -506,7 +499,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwDeleteValueKey
-DEFZwDeleteValueKey OldZwDeleteValueKey = NULL;
+DEFZwDeleteValueKey OldZwDeleteValueKey= NULL;
 
 NTSTATUS 
   NewZwDeleteValueKey(
@@ -525,7 +518,7 @@ NTSTATUS
 
 #pragma region FZwDeviceIoControlFile
 
-DEFZwDeviceIoControlFile OldZwDeviceIoControlFile = NULL;
+DEFZwDeviceIoControlFile OldZwDeviceIoControlFile= NULL;
 
 NTSTATUS 
   NewZwDeviceIoControlFile(
@@ -561,7 +554,7 @@ NTSTATUS
 
 #pragma region ZwDuplicateObject The ZwDuplicateObject routine is reserved for system use. 
 
-DEFZwDuplicateObject OldZwDuplicateObject = NULL;
+DEFZwDuplicateObject OldZwDuplicateObject= NULL;
 
 NTSTATUS
 	NewZwDuplicateObject(
@@ -590,7 +583,7 @@ IN ULONG Options
 #pragma endregion
 
 #pragma region ZwDuplicateToken
-DEFZwDuplicateToken OldZwDuplicateToken = NULL;
+DEFZwDuplicateToken OldZwDuplicateToken= NULL;
 
 NTSTATUS
   ZwDuplicateToken(
@@ -617,7 +610,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwEnumerateKey
-DEFZwEnumerateKey OldZwEnumerateKey = NULL;
+DEFZwEnumerateKey OldZwEnumerateKey= NULL;
 
 NTSTATUS 
   NewZwEnumerateKey(
@@ -644,7 +637,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwEnumerateTransactionObject
-DEFZwEnumerateTransactionObject OldZwEnumerateTransactionObject = NULL;
+DEFZwEnumerateTransactionObject OldZwEnumerateTransactionObject= NULL;
 
 NTSTATUS 
   NewZwEnumerateTransactionObject (
@@ -669,7 +662,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwEnumerateValueKey
-DEFZwEnumerateValueKey OldZwEnumerateValueKey = NULL;
+DEFZwEnumerateValueKey OldZwEnumerateValueKey= NULL;
 
 NTSTATUS
   NewZwEnumerateValueKey(
@@ -714,11 +707,11 @@ NTSTATUS
 //ÕâÀï½áÊø
 
 ////////////
-INT MDLinitED = FALSE;
+INT MDLinitED= FALSE;
 
 NTSTATUS initMDL()
 {
-	g_pmdlSystemCall = MmCreateMdl(NULL, KeServiceDescriptorTable.pvSSDTBase, KeServiceDescriptorTable.ulNumberOfServices*4);
+	g_pmdlSystemCall= MmCreateMdl(NULL, KeServiceDescriptorTable.pvSSDTBase, KeServiceDescriptorTable.ulNumberOfServices*4);
 	if(!g_pmdlSystemCall)
 	{
 		return STATUS_UNSUCCESSFUL;
@@ -726,24 +719,24 @@ NTSTATUS initMDL()
 
 	MmBuildMdlForNonPagedPool(g_pmdlSystemCall);
 
-	g_pmdlSystemCall->MdlFlags = g_pmdlSystemCall->MdlFlags | MDL_MAPPED_TO_SYSTEM_VA;
-	MappedSystemCallTable = MmMapLockedPages(g_pmdlSystemCall, KernelMode);
+	g_pmdlSystemCall->MdlFlags= g_pmdlSystemCall->MdlFlags | MDL_MAPPED_TO_SYSTEM_VA;
+	MappedSystemCallTable= MmMapLockedPages(g_pmdlSystemCall, KernelMode);
 
-	MDLinitED = TRUE;
+	MDLinitED= TRUE;
 	
 	return STATUS_SUCCESS;
 }
 
 NTSTATUS Dispatch(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 {
-	PIO_STACK_LOCATION StackLocation = IoGetCurrentIrpStackLocation(Irp);
+	PIO_STACK_LOCATION StackLocation= IoGetCurrentIrpStackLocation(Irp);
 	ULONG IoControlCode;
 	NTSTATUS ntstatus;
 
-	ntstatus = Irp->IoStatus.Status = STATUS_SUCCESS;
-	Irp->IoStatus.Information = 0;
+	ntstatus= Irp->IoStatus.Status= STATUS_SUCCESS;
+	Irp->IoStatus.Information= 0;
 
-	IoControlCode = StackLocation->Parameters.DeviceIoControl.IoControlCode;
+	IoControlCode= StackLocation->Parameters.DeviceIoControl.IoControlCode;
 
 	switch(StackLocation->MajorFunction)
 	{
@@ -779,7 +772,7 @@ VOID Unload(IN PDRIVER_OBJECT DriverObject)
 		IoFreeMdl(g_pmdlSystemCall);
 	}
 
-	MDLinitED = FALSE;
+	MDLinitED= FALSE;
 
 	if(MSkillSys != NULL)
 	{
@@ -795,47 +788,40 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING Registry
 	UNICODE_STRING DeviceName;
 	UNICODE_STRING LinkName;
 
-	DriverObject->DriverUnload = Unload;
+	DriverObject->DriverUnload= Unload;
 
 	RtlInitUnicodeString(&DeviceName, DEVICE);
 	RtlInitUnicodeString(&LinkName, DOSDEVICE);
 
-	ntstatus = IoCreateDevice(DriverObject, 0, &DeviceName, FILE_DEVICE_UNKNOWN, 0, FALSE, &MSkillSys);
+	ntstatus= IoCreateDevice(DriverObject, 0, &DeviceName, FILE_DEVICE_UNKNOWN, 0, FALSE, &MSkillSys);
 
-	if(!NT_SUCCESS(ntstatus))
-	{
+	if(!NT_SUCCESS(ntstatus)){
 		DbgPrint("create device failed\n");
 		return ntstatus;
-	}
-	else
-	{
+	}else{
 		DbgPrint("create device..\n");
 	}
 
-	ntstatus = IoCreateSymbolicLink(&LinkName, &DeviceName);
-	if(!NT_SUCCESS(ntstatus))
-	{
+	ntstatus= IoCreateSymbolicLink(&LinkName, &DeviceName);
+	if(!NT_SUCCESS(ntstatus)){
 		IoDeleteDevice(MSkillSys);
 		DbgPrint("create symbolic link failed\n");
 		return ntstatus;
-	}
-	else
-	{
+	}else{
 		DbgPrint("create symbolic link..\n");
 	}
-	DriverObject->MajorFunction[IRP_MJ_CREATE] = Dispatch;
-	DriverObject->MajorFunction[IRP_MJ_CLOSE] = Dispatch;
-	DriverObject->MajorFunction[IRP_MJ_READ] = Dispatch;
-	DriverObject->MajorFunction[IRP_MJ_WRITE] = Dispatch;
-	DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = Dispatch;
+	DriverObject->MajorFunction[IRP_MJ_CREATE]= Dispatch;
+	DriverObject->MajorFunction[IRP_MJ_CLOSE]= Dispatch;
+	DriverObject->MajorFunction[IRP_MJ_READ]= Dispatch;
+	DriverObject->MajorFunction[IRP_MJ_WRITE]= Dispatch;
+	DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]= Dispatch;
 
 	DbgPrint("hook_create\n");
-	if(!NT_SUCCESS(initMDL()))
-	{
+	if(!NT_SUCCESS(initMDL())){
 		DbgPrint("initmdl faild\n");
 		return ntstatus;
 	}
-	OldZwOpenProcess = (ZWOPENPROCESS)(SYSTEMSERVICE(ZwOpenProcess));
+	OldZwOpenProcess= (ZWOPENPROCESS)(SYSTEMSERVICE(ZwOpenProcess));
 
 	__asm cli;
 	HOOK_SYSCALL(ZwOpenProcess, NewZwOpenProcess, OldZwOpenProcess);
