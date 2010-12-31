@@ -33,23 +33,6 @@ VOID SeeUser()
 }
 
 
-#pragma region ZwOpenProcess
-
-typedef NTSTATUS (*ZWOPENPROCESS)(OUT PHANDLE ProcessHandle,
-	IN ACCESS_MASK DesiredAccess,
-	IN POBJECT_ATTRIBUTES ObjectAttributes,
-	IN PCLIENT_ID ClientId OPTIONAL);
-
-ZWOPENPROCESS OldZwOpenProcess= NULL;
-
-NTSTATUS NewZwOpenProcess(OUT PHANDLE ProcessHandle,IN ACCESS_MASK DesiredAccess,IN POBJECT_ATTRIBUTES ObjectAttributes,IN PCLIENT_ID ClientId OPTIONAL)
-{
-	SeeUser();
-	DbgPrint("ZwOpenProcess\n");
-	return OldZwOpenProcess(ProcessHandle,DesiredAccess,ObjectAttributes,ClientId);
-}
-#pragma endregion
-
 #pragma region ZwAllocateLocallyUniqueId
 ZWALLOCATELOCALLYUNIQUEID OldZwAllocateLocallyUniqueId= NULL;
 
@@ -671,6 +654,1174 @@ NTSTATUS
 }
 
 #pragma endregion
+
+#pragma region ZwFlushBuffersFile
+
+DEFZwFlushBuffersFile OldZwFlushBuffersFile= NULL;
+
+NTSTATUS
+  NewZwFlushBuffersFile(
+    IN HANDLE  FileHandle,
+    IN PIO_STATUS_BLOCK  IoStatusBlock
+    )
+{
+	SeeUser();
+	DbgPrint("ZwFlushBuffersFile\n");
+	return OldZwFlushBuffersFile(
+		FileHandle,
+		IoStatusBlock
+    ); 
+}
+
+#pragma endregion
+
+#pragma region ZwFlushKey
+
+DEFZwFlushKey OldZwFlushKey= NULL;
+
+NTSTATUS 
+  NewZwFlushKey(
+    IN HANDLE  KeyHandle
+    )
+{
+	SeeUser();
+	DbgPrint("ZwFlushKey\n");
+	return OldZwFlushKey(
+		KeyHandle
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwFlushVirtualMemory
+
+DEFZwFlushVirtualMemory OldZwFlushVirtualMemory= NULL;
+
+NTSTATUS 
+  ZwFlushVirtualMemory(
+    IN HANDLE  ProcessHandle,
+    IN OUT PVOID  *BaseAddress,
+    IN OUT PSIZE_T  RegionSize,
+    OUT PIO_STATUS_BLOCK  IoStatus 
+    )
+{
+	SeeUser();
+	DbgPrint("ZwFlushVirtualMemory\n");
+	return OldZwFlushVirtualMemory(
+		ProcessHandle,
+		BaseAddress,
+		RegionSize,
+		IoStatus 
+    ); 
+}
+
+#pragma endregion
+
+#pragma region ZwFreeVirtualMemory
+
+DEFZwFreeVirtualMemory OldZwFreeVirtualMemory= NULL;
+
+NTSTATUS 
+  NewZwFreeVirtualMemory(
+    __in HANDLE  ProcessHandle,
+    __inout PVOID  *BaseAddress,
+    __inout PSIZE_T  RegionSize,
+    __in ULONG  FreeType
+    )
+{
+	SeeUser();
+	DbgPrint("ZwFreeVirtualMemory\n")
+	OldZwFreeVirtualMemory(
+		ProcessHandle,
+		BaseAddress,
+		RegionSize,
+		FreeType
+    ); 
+}
+
+#pragma endregion
+
+#pragma region ZwFsControlFile
+
+DEFZwFsControlFile OldZwFsControlFile= NULL;
+
+NTSTATUS
+  ZwFsControlFile(
+    IN HANDLE  FileHandle,
+    IN HANDLE  Event OPTIONAL,
+    IN PIO_APC_ROUTINE  ApcRoutine OPTIONAL,
+    IN PVOID  ApcContext OPTIONAL,
+    OUT PIO_STATUS_BLOCK  IoStatusBlock,
+    IN ULONG  FsControlCode,
+    IN PVOID  InputBuffer OPTIONAL,
+    IN ULONG  InputBufferLength,
+    OUT PVOID  OutputBuffer OPTIONAL,
+    IN ULONG  OutputBufferLength
+    )
+{
+	return OldZwFsControlFile(
+		FileHandle,
+		Event,
+		ApcRoutine,
+		ApcContext,
+		IoStatusBlock,
+		FsControlCode,
+		InputBuffer,
+		InputBufferLength,
+		OutputBuffer,
+		OutputBufferLength
+    ); 
+}
+
+#pragma endregion
+
+#pragma region ZwGetNotificationResourceManager
+
+DEFZwGetNotificationResourceManager OldZwGetNotificationResourceManager= NULL;
+
+NTSTATUS
+  NewZwGetNotificationResourceManager (
+    __in HANDLE  ResourceManagerHandle,
+    __out PTRANSACTION_NOTIFICATION  TransactionNotification,
+    __in ULONG  NotificationLength,
+    __in PLARGE_INTEGER  Timeout,
+    __out_opt PULONG  ReturnLength,
+    __in ULONG  Asynchronous,
+    __in_opt ULONG_PTR  AsynchronousContext
+    )
+{
+	SeeUser();
+	DbgPrint("ZwGetNotificationResourceManager\n");
+	return OldZwGetNotificationResourceManager (
+		ResourceManagerHandle,
+		TransactionNotification,
+		NotificationLength,
+		Timeout,
+		ReturnLength,
+		Asynchronous,
+		AsynchronousContext
+    );
+}
+#pragma endregion
+
+#pragma region ZwLoadDriver
+
+DEFZwLoadDriver OldZwLoadDriver= NULL;
+
+NTSTATUS 
+  NewZwLoadDriver(
+    IN PUNICODE_STRING  DriverServiceName
+    )
+{
+	SeeUser();
+	DbgPrint("ZwLoadDriver\n");
+	return OldZwLoadDriver(
+		DriverServiceName
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwLockFile
+
+DEFZwLockFile OldZwLockFile= NULL;
+
+NTSTATUS 
+  NewZwLockFile(
+    __in HANDLE  FileHandle,
+    __in_opt HANDLE  Event,
+    __in_opt PIO_APC_ROUTINE  ApcRoutine,
+    __in_opt PVOID  ApcContext,
+    __out PIO_STATUS_BLOCK  IoStatusBlock,
+    __in PLARGE_INTEGER  ByteOffset,
+    __in PLARGE_INTEGER  Length,
+    __in ULONG  Key,
+    __in BOOLEAN  FailImmediately,
+    __in BOOLEAN  ExclusiveLock
+    )
+{
+	SeeUser();
+	DbgPrint("ZwLockFile\n");
+	return OldZwLockFile(
+		FileHandle,
+		Event,
+		ApcRoutine,
+		ApcContext,
+		IoStatusBlock,
+		ByteOffset,
+		Length,
+		Key,
+		FailImmediately,
+		ExclusiveLock
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwMakeTemporaryObject
+
+DEFZwMakeTemporaryObject OldZwMakeTemporaryObject= NULL;
+
+NTSTATUS 
+  NewZwMakeTemporaryObject(
+    IN HANDLE  Handle
+    )
+{
+	SeeUser();
+	DbgPrint("ZwMakeTemporaryObject\n");
+	return OldZwMakeTemporaryObject(
+		Handle
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwMapViewOfSection
+
+DEFZwMapViewOfSection OldZwMapViewOfSection= NULL;
+
+NTSTATUS 
+  NewZwMapViewOfSection(
+    IN HANDLE  SectionHandle,
+    IN HANDLE  ProcessHandle,
+    IN OUT PVOID  *BaseAddress,
+    IN ULONG_PTR  ZeroBits,
+    IN SIZE_T  CommitSize,
+    IN OUT PLARGE_INTEGER  SectionOffset  OPTIONAL,
+    IN OUT PSIZE_T  ViewSize,
+    IN SECTION_INHERIT  InheritDisposition,
+    IN ULONG  AllocationType,
+    IN ULONG  Win32Protect
+    )
+{
+	SeeUser();
+	DbgPrint("ZwMapViewOfSection\n");
+	return OldZwMapViewOfSection(
+		SectionHandle,
+		ProcessHandle,
+		BaseAddress,
+		ZeroBits,
+		CommitSize,
+		SectionOffset,
+		ViewSize,
+		InheritDisposition,
+		AllocationType,
+		Win32Protect
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwNotifyChangeKey
+
+DEFZwNotifyChangeKey OldZwNotifyChangeKey= NULL;
+
+NTSTATUS
+  NewZwNotifyChangeKey(
+    __in HANDLE  KeyHandle,
+    __in_opt HANDLE  Event,
+    __in_opt PIO_APC_ROUTINE  ApcRoutine,
+    __in_opt PVOID  ApcContext,
+    __out PIO_STATUS_BLOCK  IoStatusBlock,
+    __in ULONG  CompletionFilter,
+    __in BOOLEAN  WatchTree,
+    __out_opt PVOID  Buffer,
+    __in ULONG  BufferSize,
+    __in BOOLEAN  Asynchronous
+    )
+{
+	SeeUser();
+	DbgPrint("ZwNotifyChangeKey\n");
+	return OldZwNotifyChangeKey(
+		KeyHandle,
+		Event,
+		ApcRoutine,
+		ApcContext,
+		IoStatusBlock,
+		CompletionFilter,
+		WatchTree,
+		Buffer,
+		BufferSize,
+		Asynchronous
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenDirectoryObject
+
+DEFZwOpenDirectoryObject OldZwOpenDirectoryObject = NULL;
+
+NTSTATUS
+  NewZwOpenDirectoryObject(
+    __out PHANDLE  DirectoryHandle,
+    __in ACCESS_MASK  DesiredAccess,
+    __in POBJECT_ATTRIBUTES  ObjectAttributes
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenDirectoryObject\n");
+	return OldZwOpenDirectoryObject(
+		DirectoryHandle,
+		DesiredAccess,
+		ObjectAttributes
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenEnlistment
+
+DEFZwOpenEnlistment OldZwOpenEnlistment= NULL;
+
+NTSTATUS
+  NewZwOpenEnlistment (
+    __out PHANDLE  EnlistmentHandle,
+    __in ACCESS_MASK  DesiredAccess,
+    __in HANDLE  RmHandle,
+    __in LPGUID  EnlistmentGuid,
+    __in_opt POBJECT_ATTRIBUTES  ObjectAttributes
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenEnlistment\n");
+	return OldZwOpenEnlistment (
+		EnlistmentHandle,
+		DesiredAccess,
+		RmHandle,
+		EnlistmentGuid,
+		ObjectAttributes
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenEvent
+
+DEFZwOpenEvent OldZwOpenEvent= NULL;
+
+NTSTATUS 
+  NewZwOpenEvent(
+    OUT PHANDLE  EventHandle,
+    IN ACCESS_MASK  DesiredAccess,
+    IN POBJECT_ATTRIBUTES  ObjectAttributes
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenEvent\n");
+	return OldZwOpenEvent(
+		EventHandle,
+		DesiredAccess,
+		ObjectAttributes
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenFile
+
+DEFZwOpenFile OldZwOpenFile= NULL;
+
+NTSTATUS
+  NewZwOpenFile(
+    OUT PHANDLE  FileHandle,
+    IN ACCESS_MASK  DesiredAccess,
+    IN POBJECT_ATTRIBUTES  ObjectAttributes,
+    OUT PIO_STATUS_BLOCK  IoStatusBlock,
+    IN ULONG  ShareAccess,
+    IN ULONG  OpenOptions
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenFile\n");
+	return OldZwOpenFile(
+		FileHandle,
+		DesiredAccess,
+		ObjectAttributes,
+		IoStatusBlock,
+		ShareAccess,
+		OpenOptions
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenKey
+
+DEFZwOpenKey OldZwOpenKey= NULL;
+
+NTSTATUS 
+  NewZwOpenKey(
+    OUT PHANDLE  KeyHandle,
+    IN ACCESS_MASK  DesiredAccess,
+    IN POBJECT_ATTRIBUTES  ObjectAttributes
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenKey\n");
+	return OldZwOpenKey(
+		KeyHandle,
+		DesiredAccess,
+		ObjectAttributes
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenKeyEx
+
+DEFZwOpenKeyEx OldZwOpenKeyEx= NULL;
+
+NTSTATUS
+  NewZwOpenKeyEx(
+    __out PHANDLE  KeyHandle,
+    __in ACCESS_MASK  DesiredAccess,
+    __in POBJECT_ATTRIBUTES  ObjectAttributes,
+    __in ULONG  OpenOptions
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenKeyEx\n");
+	return OldZwOpenKeyEx(
+		KeyHandle,
+		DesiredAccess,
+		ObjectAttributes,
+		OpenOptions
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenKeyTransacted
+
+DEFZwOpenKeyTransacted OldZwOpenKeyTransacted= NULL;
+
+NTSTATUS
+  NewZwOpenKeyTransacted(
+    __out PHANDLE  KeyHandle,
+    __in ACCESS_MASK  DesiredAccess,
+    __in POBJECT_ATTRIBUTES  ObjectAttributes,
+    __in HANDLE  TransactionHandle
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenKeyTransacted\n);
+	return OldZwOpenKeyTransacted(
+		KeyHandle,
+		DesiredAccess,
+		ObjectAttributes,
+		TransactionHandle
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenKeyTransactedEx
+
+DEFZwOpenKeyTransactedEx OldZwOpenKeyTransactedEx= NULL;
+
+NTSTATUS
+  ZwOpenKeyTransactedEx(
+    __out PHANDLE  KeyHandle,
+    __in ACCESS_MASK  DesiredAccess,
+    __in POBJECT_ATTRIBUTES  ObjectAttributes,
+    __in ULONG  OpenOptions,
+    __in HANDLE  TransactionHandle
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenKeyTransactedEx\n);
+	return OldZwOpenKeyTransactedEx(
+		KeyHandle,
+		DesiredAccess,
+		ObjectAttributes,
+		OpenOptions,
+		TransactionHandle
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenProcess
+
+ZWOPENPROCESS OldZwOpenProcess= NULL;
+
+NTSTATUS NewZwOpenProcess(OUT PHANDLE ProcessHandle,IN ACCESS_MASK DesiredAccess,IN POBJECT_ATTRIBUTES ObjectAttributes,IN PCLIENT_ID ClientId OPTIONAL)
+{
+	SeeUser();
+	DbgPrint("ZwOpenProcess\n");
+	return OldZwOpenProcess(ProcessHandle,DesiredAccess,ObjectAttributes,ClientId);
+}
+#pragma endregion
+
+#pragma region ZwOpenProcessTokenEx
+
+DEFZwOpenProcessTokenEx OldZwOpenProcessTokenEx= NULL;
+
+NTSTATUS
+  NewZwOpenProcessTokenEx(
+    IN HANDLE  ProcessHandle,
+    IN ACCESS_MASK  DesiredAccess,
+    IN ULONG  HandleAttributes,
+    OUT PHANDLE  TokenHandle
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenProcessTokenEx\n");
+	return OldZwOpenProcessTokenEx(
+		ProcessHandle,
+		DesiredAccess,
+		HandleAttributes,
+		TokenHandle
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenResourceManager
+
+DEFZwOpenResourceManager OldZwOpenResourceManager= NULL;
+
+NTSTATUS
+  NewZwOpenResourceManager (
+    __out PHANDLE  ResourceManagerHandle,
+    __in ACCESS_MASK  DesiredAccess,
+    __in HANDLE  TmHandle,
+    __in LPGUID  ResourceManagerGuid,
+    __in_opt POBJECT_ATTRIBUTES  ObjectAttributes
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenResourceManager\n");
+	return	OldZwOpenResourceManager (
+		ResourceManagerHandle,
+		DesiredAccess,
+		TmHandle,
+		ResourceManagerGuid,
+		ObjectAttributes
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenSection
+
+DEFZwOpenSection OldZwOpenSection= NULL;
+
+NTSTATUS 
+  NewZwOpenSection(
+    OUT PHANDLE  SectionHandle,
+    IN ACCESS_MASK  DesiredAccess,
+    IN POBJECT_ATTRIBUTES  ObjectAttributes
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenSection\n");
+	return OldZwOpenSection(
+		SectionHandle,
+		DesiredAccess,
+		ObjectAttributes
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenSymbolicLinkObject
+
+DEFZwOpenSymbolicLinkObject OldZwOpenSymbolicLinkObject= NULL;
+
+NTSTATUS
+  NewZwOpenSymbolicLinkObject(
+    OUT PHANDLE  LinkHandle,
+    IN ACCESS_MASK  DesiredAccess,
+    IN POBJECT_ATTRIBUTES  ObjectAttributes
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenSymbolicLinkObject\n");
+	return OldZwOpenSymbolicLinkObject(
+		LinkHandle,
+		DesiredAccess,
+		ObjectAttributes
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenThreadTokenEx
+
+DEFZwOpenThreadTokenEx OldZwOpenThreadTokenEx= NULL;
+
+NTSTATUS
+  NewZwOpenThreadTokenEx(
+    IN HANDLE  ThreadHandle,
+    IN ACCESS_MASK  DesiredAccess,
+    IN BOOLEAN  OpenAsSelf,
+    IN ULONG  HandleAttributes,
+    OUT PHANDLE  TokenHandle
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenThreadTokenEx\n");
+	return OldZwOpenThreadTokenEx(
+		ThreadHandle,
+		DesiredAccess,
+		OpenAsSelf,
+		HandleAttributes,
+		TokenHandle
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenTransaction
+
+DEFZwOpenTransaction OldZwOpenTransaction= NULL;
+
+NTSTATUS
+  NewZwOpenTransaction (
+    __out PHANDLE  TransactionHandle,
+    __in ACCESS_MASK  DesiredAccess,
+    __in_opt POBJECT_ATTRIBUTES  ObjectAttributes,
+    __in LPGUID  Uow,
+    __in_opt HANDLE  TmHandle
+    )
+{
+	SeeUser();
+	DbgPrint("ZwOpenTransaction\n");
+	return OldZwOpenTransaction (
+		TransactionHandle,
+		DesiredAccess,
+		ObjectAttributes,
+		Uow,
+		TmHandle
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwOpenTransactionManager
+
+DEFZwOpenTransactionManager OldZwOpenTransactionManager= NULL;
+
+NTSTATUS
+  NewZwOpenTransactionManager(
+    __out PHANDLE  TmHandle,
+    __in ACCESS_MASK  DesiredAccess,
+    __in_opt POBJECT_ATTRIBUTES  ObjectAttributes,
+    __in_opt PUNICODE_STRING  LogFileName,
+    __in_opt LPGUID  TmIdentity,
+    __in_opt ULONG  OpenOptions
+    );
+{
+	SeeUser();
+	DbgPrint("ZwOpenTransactionManager\n");
+	return OldZwOpenTransactionManager(
+		TmHandle,
+		DesiredAccess,
+		ObjectAttributes,
+		LogFileName,
+		TmIdentity,
+		OpenOptions
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwPrepareComplete
+
+DEFZwPrepareComplete OldZwPrepareComplete = NULL;
+
+NTSTATUS
+  NewZwPrepareComplete (
+    __in HANDLE  EnlistmentHandle,
+    __in_opt PLARGE_INTEGER  TmVirtualClock
+    )
+{
+	SeeUser();
+	DbgPrint("ZwPrepareComplete\n");
+	return OldZwPrepareComplete (
+		EnlistmentHandle,
+		TmVirtualClock
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwPrepareEnlistment
+
+DEFZwPrepareEnlistment OldZwPrepareEnlistment= NULL;
+
+NTSTATUS
+  NewZwPrepareEnlistment (
+    __in HANDLE  EnlistmentHandle,
+    __in_opt PLARGE_INTEGER  TmVirtualClock
+    )
+{
+	SeeUser();
+	DbgPrint("ZwPrepareEnlistment\n");
+	return OldZwPrepareEnlistment (
+		EnlistmentHandle,
+		TmVirtualClock
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwPrePrepareComplete
+
+DEFZwPrePrepareComplete OldZwPrePrepareComplete = NULL;
+
+NTSTATUS
+  NewZwPrePrepareComplete (
+    __in HANDLE  EnlistmentHandle,
+    __in_opt PLARGE_INTEGER  TmVirtualClock
+    )
+{
+	SeeUser();
+	DbgPrint("ZwPrePrepareComplete\n");
+	return OldZwPrePrepareComplete (
+		EnlistmentHandle,
+		TmVirtualClock
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwPrePrepareEnlistment
+
+DEFZwPrePrepareEnlistment OldZwPrePrepareEnlistment= NULL;
+
+NTSTATUS
+  NewZwPrePrepareEnlistment (
+    __in HANDLE  EnlistmentHandle,
+    __in_opt PLARGE_INTEGER  TmVirtualClock
+    )
+{
+	SeeUser();
+	DbgPrint();
+	return OldZwPrePrepareEnlistment (
+		EnlistmentHandle,
+		TmVirtualClock
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwQueryDirectoryFile
+
+DEFZwQueryDirectoryFile OldZwQueryDirectoryFile = NULL;
+
+NTSTATUS 
+  NewZwQueryDirectoryFile(
+    __in HANDLE  FileHandle,
+    __in_opt HANDLE  Event,
+    __in_opt PIO_APC_ROUTINE  ApcRoutine,
+    __in_opt PVOID  ApcContext,
+    __out PIO_STATUS_BLOCK  IoStatusBlock,
+    __out PVOID  FileInformation,
+    __in ULONG  Length,
+    __in FILE_INFORMATION_CLASS  FileInformationClass,
+    __in BOOLEAN  ReturnSingleEntry,
+    __in_opt PUNICODE_STRING  FileName,
+    __in BOOLEAN  RestartScan
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQueryDirectoryFile\n");
+	return OldZwQueryDirectoryFile(
+		FileHandle,
+		Event,
+		ApcRoutine,
+		ApcContext,
+		IoStatusBlock,
+		FileInformation,
+		Length,
+		FileInformationClass,
+		ReturnSingleEntry,
+		FileName,
+		RestartScan
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwQueryFullAttributesFile
+
+DEFZwQueryFullAttributesFile OldZwQueryFullAttributesFile = NULL;
+
+NTSTATUS
+  ZwQueryFullAttributesFile(
+    IN POBJECT_ATTRIBUTES  ObjectAttributes,
+    OUT PFILE_NETWORK_OPEN_INFORMATION  FileInformation
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQueryFullAttributesFile\n");
+	return OldZwQueryFullAttributesFile(
+		ObjectAttributes,
+		FileInformation
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwQueryInformationEnlistment
+
+DEFZwQueryInformationEnlistment OldZwQueryInformationEnlistment = NULL;
+
+NTSTATUS
+  NewZwQueryInformationEnlistment (
+    __in HANDLE  EnlistmentHandle,
+    __in ENLISTMENT_INFORMATION_CLASS  EnlistmentInformationClass,
+    __out PVOID  EnlistmentInformation,
+    __in ULONG  EnlistmentInformationLength,
+    __out_opt PULONG  ReturnLength
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQueryInformationEnlistment\n");
+	return OldZwQueryInformationEnlistment (
+		EnlistmentHandle,
+		EnlistmentInformationClass,
+		EnlistmentInformation,
+		EnlistmentInformationLength,
+		ReturnLength
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwQueryInformationFile
+
+DEFZwQueryInformationFile OldZwQueryInformationFile = NULL;
+
+NTSTATUS 
+  NewZwQueryInformationFile(
+    IN HANDLE  FileHandle,
+    OUT PIO_STATUS_BLOCK  IoStatusBlock,
+    OUT PVOID  FileInformation,
+    IN ULONG  Length,
+    IN FILE_INFORMATION_CLASS  FileInformationClass
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQueryInformationFile\n");
+	return OldZwQueryInformationFile(
+		FileHandle,
+		IoStatusBlock,
+		FileInformation,
+		Length,
+		FileInformationClass
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwQueryInformationResourceManager
+
+DEFZwQueryInformationResourceManager OldZwQueryInformationResourceManager = NULL;
+
+NTSTATUS
+  NewZwQueryInformationResourceManager (
+    __in HANDLE  ResourceManagerHandle,
+    __in RESOURCEMANAGER_INFORMATION_CLASS  ResourceManagerInformationClass,
+    __out PVOID  ResourceManagerInformation,
+    __in ULONG  ResourceManagerInformationLength,
+    __out_opt PULONG  ReturnLength
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQueryInformationResourceManager\n");
+	return OldZwQueryInformationResourceManager (
+		ResourceManagerHandle,
+		ResourceManagerInformationClass,
+		ResourceManagerInformation,
+		ResourceManagerInformationLength,
+		ReturnLength
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwQueryInformationToken
+
+DEFZwQueryInformationToken OldZwQueryInformationToken = NULL;
+
+NTSTATUS
+  NewZwQueryInformationToken(
+    IN HANDLE  TokenHandle,
+    IN TOKEN_INFORMATION_CLASS  TokenInformationClass,
+    OUT PVOID  TokenInformation,
+    IN ULONG  TokenInformationLength,
+    OUT PULONG  ReturnLength
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQueryInformationToken\n");
+	return OldZwQueryInformationToken(
+		TokenHandle,
+		TokenInformationClass,
+		TokenInformation,
+		TokenInformationLength,
+		ReturnLength
+    ); 
+}
+
+#pragma endregion
+
+#pragma region ZwQueryInformationTransaction
+
+DEFZwQueryInformationTransaction OldZwQueryInformationTransaction = NULL;
+
+NTSTATUS
+  NewZwQueryInformationTransaction (
+    __in HANDLE  TransactionHandle,
+    __in TRANSACTION_INFORMATION_CLASS  TransactionInformationClass,
+    __out PVOID  TransactionInformation,
+    __in ULONG  TransactionInformationLength,
+    __out_opt PULONG  ReturnLength
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQueryInformationTransaction\n");
+	return OldZwQueryInformationTransaction (
+		TransactionHandle,
+		TransactionInformationClass,
+		TransactionInformation,
+		TransactionInformationLength,
+		ReturnLength
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwQueryInformationTransactionManager
+
+DEFZwQueryInformationTransactionManager OldZwQueryInformationTransactionManager = NULL;
+
+NTSTATUS
+  NewZwQueryInformationTransactionManager(
+    __in HANDLE  TransactionManagerHandle,
+    __in TRANSACTIONMANAGER_INFORMATION_CLASS  TransactionManagerInformationClass,
+    __out PVOID  TransactionManagerInformation,
+    __in ULONG  TransactionManagerInformationLength,
+    __out_opt PULONG  ReturnLength
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQueryInformationTransactionManager\n");
+	return OldZwQueryInformationTransactionManager(
+		TransactionManagerHandle,
+		TransactionManagerInformationClass,
+		TransactionManagerInformation,
+		TransactionManagerInformationLength,
+		ReturnLength
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwQueryKey
+
+DEFZwQueryKey OldZwQueryKey = NULL;
+
+NTSTATUS 
+  NewZwQueryKey(
+    IN HANDLE  KeyHandle,
+    IN KEY_INFORMATION_CLASS  KeyInformationClass,
+    OUT PVOID  KeyInformation,
+    IN ULONG  Length,
+    OUT PULONG  ResultLength
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQueryKey\n");
+	return OldZwQueryKey(
+		KeyHandle,
+		KeyInformationClass,
+		KeyInformation,
+		Length,
+		ResultLength
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwQueryObject
+
+DEFZwQueryObject OldZwQueryObject = NULL;
+
+NTSTATUS
+  NewZwQueryObject(
+    __in_opt HANDLE  Handle,
+    __in OBJECT_INFORMATION_CLASS  ObjectInformationClass,
+    __out_bcount_opt(ObjectInformationLength) PVOID  ObjectInformation,
+    __in ULONG  ObjectInformationLength,
+    __out_opt PULONG  ReturnLength
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQueryObject\n");
+	return OldZwQueryObject(
+		Handle,
+		ObjectInformationClass,
+		ObjectInformation,
+		ObjectInformationLength,
+		ReturnLength
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwQueryQuotaInformationFile
+
+DEFZwQueryQuotaInformationFile OldZwQueryQuotaInformationFile = NULL;
+
+NTSTATUS
+  NewZwQueryQuotaInformationFile(
+    __in HANDLE  FileHandle,
+    __out PIO_STATUS_BLOCK  IoStatusBlock,
+    __out  PVOID Buffer,
+    __in ULONG  Length,
+    __in BOOLEAN  ReturnSingleEntry,
+    __in_opt PVOID  SidList,
+    __in ULONG  SidListLength,
+    __in_opt PSID  StartSid OPTIONAL,
+    __in BOOLEAN  RestartScan
+)
+{
+	SeeUser();
+	DbgPrint("ZwQueryQuotaInformationFile\n");
+	return OldZwQueryQuotaInformationFile(
+		FileHandle,
+		IoStatusBlock,
+		Buffer,
+		Length,
+		ReturnSingleEntry,
+		SidList,
+		SidListLength,
+		StartSid,
+		RestartScan
+	);
+}
+
+#pragma endregion
+
+#pragma region ZwQuerySecurityObject
+
+DEFZwQuerySecurityObject OldZwQuerySecurityObject = NULL;
+
+NTSTATUS
+  NewZwQuerySecurityObject(
+    IN HANDLE  Handle,
+    IN SECURITY_INFORMATION  SecurityInformation,
+    OUT PSECURITY_DESCRIPTOR  SecurityDescriptor,
+    IN ULONG  Length,
+    OUT PULONG  LengthNeeded
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQuerySecurityObject\n");
+	return OldZwQuerySecurityObject(
+		Handle,
+		SecurityInformation,
+		SecurityDescriptor,
+		Length,
+		LengthNeeded
+    ); 
+}
+
+#pragma endregion
+
+#pragma region ZwQuerySymbolicLinkObject
+
+DEFZwQuerySymbolicLinkObject OldZwQuerySymbolicLinkObject = NUll;
+
+NTSTATUS
+  NewZwQuerySymbolicLinkObject(
+    IN HANDLE  LinkHandle,
+    IN OUT PUNICODE_STRING  LinkTarget,
+    OUT PULONG  ReturnedLength OPTIONAL
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQuerySymbolicLinkObject\n");
+	return OldZwQuerySymbolicLinkObject(
+		LinkHandle,
+		LinkTarget,
+		ReturnedLength
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwQueryValueKey
+
+DEFZwQueryValueKey OldZwQueryValueKey = NULL;
+
+NTSTATUS 
+  NewZwQueryValueKey(
+    IN HANDLE  KeyHandle,
+    IN PUNICODE_STRING  ValueName,
+    IN KEY_VALUE_INFORMATION_CLASS  KeyValueInformationClass,
+    OUT PVOID  KeyValueInformation,
+    IN ULONG  Length,
+    OUT PULONG  ResultLength
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQueryValueKey\n");
+	return OldZwQueryValueKey(
+		KeyHandle,
+		ValueName,
+		KeyValueInformationClass,
+		KeyValueInformation,
+		Length,
+		ResultLength
+    );
+}
+
+#pragma endregion
+
+#pragma region ZwQueryVolumeInformationFile
+
+DEFZwQueryVolumeInformationFile OldZwQueryVolumeInformationFile = NULL;
+
+NTSTATUS
+  NewZwQueryVolumeInformationFile(
+    IN HANDLE  FileHandle,
+    OUT PIO_STATUS_BLOCK  IoStatusBlock,
+    OUT PVOID  FsInformation,
+    IN ULONG  Length,
+    IN FS_INFORMATION_CLASS  FsInformationClass
+    )
+{
+	SeeUser();
+	DbgPrint("ZwQueryVolumeInformationFile\n");
+	return OldZwQueryVolumeInformationFile(
+		FileHandle,
+		IoStatusBlock,
+		FsInformation,
+		Length,
+		FsInformationClass
+    );
+}
+
+#pragma endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
