@@ -1,10 +1,10 @@
 #pragma once
 #include <ntddk.h>
 
-typedef NTSTATUS  (*ZWALLOCATELOCALLYUNIQUEID)( OUT PLUID  LUID );
+typedef NTSTATUS  (*DEFZwALLOCATELOCALLYUNIQUEID)( OUT PLUID  LUID );
 
 typedef NTSTATUS 
-(*ZWALLOCATEVIRTUALMEMORY)(
+(*DEFZwALLOCATEVIRTUALMEMORY)(
 						   __in HANDLE  ProcessHandle,
 						   __inout PVOID  *BaseAddress,
 						   __in ULONG_PTR  ZeroBits,
@@ -13,35 +13,35 @@ typedef NTSTATUS
 						   __in ULONG  Protect
 						   ); 
 
-typedef NTSTATUS (*ZWCLOSE)( IN HANDLE  Handle);
+typedef NTSTATUS (*DEFZwCLOSE)( IN HANDLE  Handle);
 
 typedef NTSTATUS
-(*ZWCOMMITCOMPLETE)(
+(*DEFZwCOMMITCOMPLETE)(
 					__in HANDLE  EnlistmentHandle,
 					__in_opt PLARGE_INTEGER  TmVirtualClock
 					);
 
 typedef NTSTATUS
-(*ZWCOMMITENLISTMENT) (
+(*DEFZwCOMMITENLISTMENT) (
 					   __in HANDLE  EnlistmentHandle,
 					   __in_opt PLARGE_INTEGER  TmVirtualClock
 					   );
 
 typedef NTSTATUS 
-(*ZWCOMMITTRANSACTION)(
+(*DEFZwCOMMITTRANSACTION)(
 					   IN PHANDLE  TransactionHandle,
 					   IN BOOLEAN  Wait
 					   );
 
 typedef NTSTATUS 
-(*ZWCREATEDIRECTORYOBJECT)(
+(*DEFZwCREATEDIRECTORYOBJECT)(
 						   OUT PHANDLE  DirectoryHandle,
 						   IN ACCESS_MASK  DesiredAccess,
 						   IN POBJECT_ATTRIBUTES  ObjectAttributes
 						   );
 
 typedef NTSTATUS
-(*ZWCREATEENLISTMENT)(
+(*DEFZwCREATEENLISTMENT)(
 					  __out PHANDLE  EnlistmentHandle,
 					  __in ACCESS_MASK  DesiredAccess,
 					  __in HANDLE  ResourceManagerHandle,
@@ -53,7 +53,7 @@ typedef NTSTATUS
 					  );
 
 typedef NTSTATUS
-(*ZWCREATEEVENT)(
+(*DEFZwCREATEEVENT)(
 				 OUT PHANDLE  EventHandle,
 				 IN ACCESS_MASK  DesiredAccess,
 				 IN POBJECT_ATTRIBUTES  ObjectAttributes OPTIONAL,
@@ -63,7 +63,7 @@ typedef NTSTATUS
 
 
 typedef NTSTATUS 
-(*ZWCREATEFILE)(
+(*DEFZwCREATEFILE)(
 				__out PHANDLE  FileHandle,
 				__in ACCESS_MASK  DesiredAccess,
 				__in POBJECT_ATTRIBUTES  ObjectAttributes,
@@ -78,7 +78,7 @@ typedef NTSTATUS
 				);
 
 typedef NTSTATUS 
-(*ZWCREATEKEY)(
+(*DEFZwCREATEKEY)(
 			   OUT PHANDLE  KeyHandle,
 			   IN ACCESS_MASK  DesiredAccess,
 			   IN POBJECT_ATTRIBUTES  ObjectAttributes,
@@ -89,7 +89,7 @@ typedef NTSTATUS
 			   );
 
 typedef NTSTATUS
-(*ZWCREATEKEYTRANSACTED)(
+(*DEFZwCREATEKEYTRANSACTED)(
 						 __out PHANDLE  KeyHandle,
 						 __in ACCESS_MASK  DesiredAccess,
 						 __in POBJECT_ATTRIBUTES  ObjectAttributes,
@@ -101,7 +101,7 @@ typedef NTSTATUS
 						 );
 
 typedef NTSTATUS
-(*ZWCREATERESOURCEMANAGER)(
+(*DEFZwCREATERESOURCEMANAGER)(
 						   __out PHANDLE  ResourceManagerHandle,
 						   __in ACCESS_MASK  DesiredAccess,
 						   __in HANDLE  TmHandle,
@@ -112,7 +112,7 @@ typedef NTSTATUS
 						   );
 
 typedef NTSTATUS 
-(*ZWCREATESECTION)(
+(*DEFZwCREATESECTION)(
 				   OUT PHANDLE  SectionHandle,
 				   IN ACCESS_MASK  DesiredAccess,
 				   IN POBJECT_ATTRIBUTES  ObjectAttributes  OPTIONAL,
@@ -123,7 +123,7 @@ typedef NTSTATUS
 				   );
 
 typedef NTSTATUS
-(*ZWCREATETRANSACTION) (
+(*DEFZwCREATETRANSACTION) (
 						__out PHANDLE  TransactionHandle,
 						__in ACCESS_MASK  DesiredAccess,
 						__in_opt POBJECT_ATTRIBUTES  ObjectAttributes,
@@ -239,6 +239,7 @@ typedef NTSTATUS
     IN HANDLE  FileHandle,
     IN PIO_STATUS_BLOCK  IoStatusBlock
     ); 
+
 
 typedef NTSTATUS 
   (*DEFZwFlushKey)(
@@ -403,7 +404,7 @@ typedef NTSTATUS
     __in HANDLE  TransactionHandle
     );
 
-typedef NTSTATUS (*ZWOPENPROCESS)(OUT PHANDLE ProcessHandle,
+typedef NTSTATUS (*DEFZwOpenProcess)(OUT PHANDLE ProcessHandle,
 								  IN ACCESS_MASK DesiredAccess,
 								  IN POBJECT_ATTRIBUTES ObjectAttributes,
 								  IN PCLIENT_ID ClientId OPTIONAL);
@@ -595,6 +596,12 @@ typedef NTSTATUS
     OUT PULONG  ResultLength
     );
 
+typedef enum _OBJECT_INFORMATION_CLASS {
+	ObjectBasicInformation=0,
+	ObjectTypeInformation=2,
+} OBJECT_INFORMATION_CLASS;
+
+
 typedef NTSTATUS
   (*DEFZwQueryObject)(
     __in_opt HANDLE  Handle,
@@ -651,3 +658,254 @@ typedef NTSTATUS
     IN ULONG  Length,
     IN FS_INFORMATION_CLASS  FsInformationClass
     );
+
+/*Cooolie --->2011Äê1ÔÂ2ÈÕ 23:31:47*/
+typedef
+NTSTATUS 
+(*DEFZwReadFile)(
+		   IN HANDLE  FileHandle,
+		   IN HANDLE  Event  OPTIONAL,
+		   IN PIO_APC_ROUTINE  ApcRoutine  OPTIONAL,
+		   IN PVOID  ApcContext  OPTIONAL,
+		   OUT PIO_STATUS_BLOCK  IoStatusBlock,
+		   OUT PVOID  Buffer,
+		   IN ULONG  Length,
+		   IN PLARGE_INTEGER  ByteOffset  OPTIONAL,
+		   IN PULONG  Key  OPTIONAL
+		   );
+
+
+typedef
+NTSTATUS
+(*DEFZwReadOnlyEnlistment) (
+					  __in HANDLE  EnlistmentHandle,
+					  __in_opt PLARGE_INTEGER  TmVirtualClock
+					  );
+
+
+typedef
+NTSTATUS
+(*DEFZwRecoverEnlistment) (
+					 __in HANDLE  EnlistmentHandle,
+					 __in_opt PVOID  EnlistmentKey
+					 );
+
+
+typedef
+NTSTATUS
+(*DEFZwRecoverResourceManager)(
+						 IN HANDLE  ResourceManagerHandle
+						 );
+
+
+typedef
+NTSTATUS
+(*DEFZwRecoverTransactionManager)(
+							__in HANDLE  TransactionManagerHandle
+							);
+
+
+
+/*
+The ZwRegistryCreate rule specifies that, after calling ZwCreateKey, 
+the driver can call the following registry functions only while holding an open handle to the registry key 
+(that is, before any calls to ZwClose or ZwDeleteKey to close or delete the handle to the registry key):
+
+ZwRegistryOpen
+The ZwRegistryOpen rule specifies that after calling ZwOpenKey,
+the driver calls the following registry functions only while holding an open handle to a registry key 
+(that is, before calling ZwClose or ZwDeleteKey):
+*/
+
+
+
+typedef
+NTSTATUS
+(*DEFZwRollbackComplete) (
+					__in HANDLE  EnlistmentHandle,
+					__in_opt PLARGE_INTEGER  TmVirtualClock
+					);
+
+
+typedef
+NTSTATUS
+(*DEFZwRollbackEnlistment) (
+					  __in HANDLE  EnlistmentHandle,
+					  __in_opt PLARGE_INTEGER  TmVirtualClock
+					  );
+
+
+typedef
+NTSTATUS 
+(*DEFZwRollbackTransaction)(
+					  IN PHANDLE  TransactionHandle,
+					  IN BOOLEAN  Wait
+					  );
+
+
+typedef
+NTSTATUS
+(*DEFZwRollforwardTransactionManager)(
+								__in PHANDLE  TransactionManagerHandle,
+								__in_opt PLARGE_INTEGER  TmVirtualClock
+								);
+
+
+typedef
+NTSTATUS
+(*DEFZwSetEvent)(
+		   __in HANDLE  EventHandle,
+		   __out_opt PLONG  PreviousState 
+		   );
+
+
+typedef
+NTSTATUS
+(*DEFZwSetInformationEnlistment) (
+							__in HANDLE  EnlistmentHandle,
+							__in ENLISTMENT_INFORMATION_CLASS  EnlistmentInformationClass,
+							__in PVOID  EnlistmentInformation,
+							__in ULONG  EnlistmentInformationLength
+							);
+
+
+typedef
+NTSTATUS 
+(*DEFZwSetInformationFile)(
+					 IN HANDLE  FileHandle,
+					 OUT PIO_STATUS_BLOCK  IoStatusBlock,
+					 IN PVOID  FileInformation,
+					 IN ULONG  Length,
+					 IN FILE_INFORMATION_CLASS  FileInformationClass
+					 );
+
+
+/*
+ZwSetInformationResourceManager
+The ZwSetInformationResourceManager routine is not used.
+*/
+
+
+typedef
+NTSTATUS 
+(*DEFZwSetInformationThread)(
+					   IN HANDLE  ThreadHandle,
+					   IN THREADINFOCLASS  ThreadInformationClass,
+					   IN PVOID  ThreadInformation,
+					   IN ULONG  ThreadInformationLength
+					   );
+
+
+typedef
+NTSTATUS
+(*DEFZwSetInformationToken)(
+					  IN HANDLE  TokenHandle,
+					  IN TOKEN_INFORMATION_CLASS  TokenInformationClass,
+					  IN PVOID  TokenInformation,
+					  IN ULONG  TokenInformationLength
+					  ); 
+
+
+typedef
+NTSTATUS
+(*DEFZwSetQuotaInformationFile)(
+							 __in HANDLE  FileHandle,
+							 __out PIO_STATUS_BLOCK  IoStatusBlock,
+							 __in_bcount(Length) PVOID  Buffer,
+							 __in ULONG  Length
+						  );
+
+
+typedef
+NTSTATUS
+(*DEFZwSetSecurityObject)(
+					IN HANDLE  Handle,
+					IN SECURITY_INFORMATION  SecurityInformation,
+					IN PSECURITY_DESCRIPTOR  SecurityDescriptor
+					); 
+
+
+typedef
+NTSTATUS 
+(*DEFZwSetValueKey)(
+				 IN HANDLE  KeyHandle,
+				 IN PUNICODE_STRING  ValueName,
+				 IN ULONG  TitleIndex  OPTIONAL,
+				 IN ULONG  Type,
+				 IN PVOID  Data,
+				 IN ULONG  DataSize
+				 );
+
+
+typedef
+NTSTATUS
+(*DEFZwSetVolumeInformationFile)(
+							  IN HANDLE  FileHandle,
+							  OUT PIO_STATUS_BLOCK  IoStatusBlock,
+							  IN PVOID  FsInformation,
+							  IN ULONG  Length,
+							  IN FS_INFORMATION_CLASS  FsInformationClass
+						   ); 
+
+
+typedef
+NTSTATUS
+(*DEFZwSinglePhaseReject) (
+						__in HANDLE  EnlistmentHandle,
+						__in_opt PLARGE_INTEGER  TmVirtualClock
+					 );
+
+
+typedef
+NTSTATUS
+(*DEFZwTerminateProcess)(
+					  IN HANDLE  ProcessHandle,
+					  IN NTSTATUS  ExitStatus
+					  );
+
+
+typedef
+NTSTATUS 
+(*DEFZwUnloadDriver)(
+				  IN PUNICODE_STRING  DriverServiceName
+				  );
+
+
+typedef
+NTSTATUS 
+(*DEFZwUnlockFile )(
+				 __in HANDLE  FileHandle,
+				 __out PIO_STATUS_BLOCK  IoStatusBlock,
+				 __in PLARGE_INTEGER  ByteOffset,
+				 __in PLARGE_INTEGER  Length,
+				 __in ULONG  Key
+				 );
+
+
+typedef
+NTSTATUS 
+(*DEFZwUnmapViewOfSection)(
+						IN HANDLE  ProcessHandle,
+						IN PVOID  BaseAddress
+					 );
+
+typedef
+NTSTATUS
+(*DEFZwWaitForSingleObject)(
+						 __in HANDLE  Handle,
+						 __in BOOLEAN  Alertable,
+						 __in_opt PLARGE_INTEGER  Timeout
+					  );
+
+typedef NTSTATUS 
+(*DEFZwWriteFile)(
+			   IN HANDLE  FileHandle,
+			   IN HANDLE  Event  OPTIONAL,
+			   IN PIO_APC_ROUTINE  ApcRoutine  OPTIONAL,
+			   IN PVOID  ApcContext  OPTIONAL,
+			   OUT PIO_STATUS_BLOCK  IoStatusBlock,
+			   IN PVOID  Buffer,
+			   IN ULONG  Length,
+			   IN PLARGE_INTEGER  ByteOffset  OPTIONAL,
+			   IN PULONG  Key  OPTIONAL
+			   );
