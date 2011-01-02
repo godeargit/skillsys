@@ -15,7 +15,6 @@ PMDL g_pmdlSystemCall;
 PVOID *MappedSystemCallTable;
 ///////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////
 #define SYSTEMSERVICE(_function) KeServiceDescriptorTable.pvSSDTBase[*(PULONG)((PUCHAR)_function + 1)]
 
 #define SYSCALL_INDEX(_Function) *(PULONG)((PUCHAR)_Function + 1)
@@ -33,9 +32,10 @@ VOID SeeUser()
 }
 
 
-#pragma region ZwAllocateLocallyUniqueId
-ZWALLOCATELOCALLYUNIQUEID OldZwAllocateLocallyUniqueId= NULL;
 
+
+#pragma region ZwAllocateLocallyUniqueId
+DEFZwALLOCATELOCALLYUNIQUEID OldZwAllocateLocallyUniqueId= NULL;
 NTSTATUS  NewZwAllocateLocallyUniqueId( OUT PLUID  LUID){
 	SeeUser();
 	DbgPrint("ZwAllocateLocallyUniqueId\n");
@@ -44,9 +44,7 @@ NTSTATUS  NewZwAllocateLocallyUniqueId( OUT PLUID  LUID){
 #pragma endregion
 
 #pragma region ZwAllocateVirtualMemory
-
-ZWALLOCATEVIRTUALMEMORY OldZwAllocateVirtualMemory= NULL;
-
+DEFZwALLOCATEVIRTUALMEMORY OldZwAllocateVirtualMemory= NULL;
 NTSTATUS NewZwAllocateVirtualMemory(__in HANDLE  ProcessHandle, __inout PVOID  *BaseAddress, __in ULONG_PTR  ZeroBits, __inout PSIZE_T  RegionSize, __in ULONG  AllocationType, __in ULONG  Protect){
 	SeeUser();
 	DbgPrint("ZwAllocateVirtualMemory\n");
@@ -57,7 +55,7 @@ NTSTATUS NewZwAllocateVirtualMemory(__in HANDLE  ProcessHandle, __inout PVOID  *
 
 #pragma region ZwClose
 
-ZWCLOSE OldZwClose= NULL;
+DEFZwCLOSE OldZwClose= NULL;
 
 NTSTATUS NewZwClose(IN HANDLE  Handle)
 {
@@ -70,7 +68,7 @@ NTSTATUS NewZwClose(IN HANDLE  Handle)
 
 #pragma region ZwCommitComplete < vista
 
-ZWCOMMITCOMPLETE OldZwCommitComplete= NULL;
+DEFZwCOMMITCOMPLETE OldZwCommitComplete= NULL;
 NTSTATUS
   NewZwCommitComplete(
     __in HANDLE  EnlistmentHandle,
@@ -83,7 +81,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwCommitEnlistment
-ZWCOMMITENLISTMENT OldZwCommitEnlistment= NULL;
+DEFZwCOMMITENLISTMENT OldZwCommitEnlistment= NULL;
 
 NTSTATUS
   NewZwCommitEnlistment (
@@ -98,7 +96,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwCommitTransactio;
-ZWCOMMITTRANSACTION OldZwCommitTransaction= NULL;
+DEFZwCOMMITTRANSACTION OldZwCommitTransaction= NULL;
 
 NTSTATUS 
   NewZwCommitTransaction(
@@ -113,7 +111,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwCreateDirectoryObject
-ZWCREATEDIRECTORYOBJECT OldZwCreateDirectoryObject= NULL;
+DEFZwCREATEDIRECTORYOBJECT OldZwCreateDirectoryObject= NULL;
 
 NTSTATUS 
   NewZwCreateDirectoryObject(
@@ -129,7 +127,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwCreateEnlistment
-ZWCREATEENLISTMENT OldZwCreateEnlistment= NULL;
+DEFZwCREATEENLISTMENT OldZwCreateEnlistment= NULL;
 
 NTSTATUS
   NewZwCreateEnlistment (
@@ -161,7 +159,7 @@ NTSTATUS
 
 #pragma region ZwCreateEvent
 
-ZWCREATEEVENT OldZwCreateEvent= NULL;
+DEFZwCREATEEVENT OldZwCreateEvent= NULL;
 
 NTSTATUS
   NewZwCreateEvent(
@@ -187,7 +185,7 @@ NTSTATUS
 
 #pragma region ZwCreateFile
 
-ZWCREATEFILE OldZwCreateFile= NULL;
+DEFZwCREATEFILE OldZwCreateFile= NULL;
 
 NTSTATUS NewZwCreateFile(
     __out PHANDLE  FileHandle,
@@ -224,7 +222,7 @@ NTSTATUS NewZwCreateFile(
 #pragma endregion
 
 #pragma region ZwCreateKey
-ZWCREATEKEY OldZwCreateKey= NULL;
+DEFZwCREATEKEY OldZwCreateKey= NULL;
 
 NTSTATUS NewZwCreateKey(
     OUT PHANDLE  KeyHandle,
@@ -253,7 +251,7 @@ NTSTATUS NewZwCreateKey(
 #pragma endregion
 
 #pragma region ZwCreateKeyTransacted
-ZWCREATEKEYTRANSACTED OldZwCreateKeyTransacted= NULL;
+DEFZwCREATEKEYTRANSACTED OldZwCreateKeyTransacted= NULL;
 
 NTSTATUS
   NewZwCreateKeyTransacted(
@@ -285,7 +283,7 @@ NTSTATUS
 
 #pragma region ZwCreateResourceManager
 
-ZWCREATERESOURCEMANAGER OldZwCreateResourceManager= NULL;
+DEFZwCREATERESOURCEMANAGER OldZwCreateResourceManager= NULL;
 
 
 NTSTATUS
@@ -315,7 +313,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwCreateSection
-ZWCREATESECTION OldZwCreateSection= NULL;
+DEFZwCREATESECTION OldZwCreateSection= NULL;
 
 NTSTATUS 
   NewZwCreateSection(
@@ -344,7 +342,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwCreateTransaction
-ZWCREATETRANSACTION OldZwCreateTransaction= NULL;
+DEFZwCREATETRANSACTION OldZwCreateTransaction= NULL;
 
 NTSTATUS
   NewZwCreateTransaction (
@@ -520,9 +518,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwDuplicateObject The ZwDuplicateObject routine is reserved for system use. 
-
 DEFZwDuplicateObject OldZwDuplicateObject= NULL;
-
 NTSTATUS
 	NewZwDuplicateObject(
 IN HANDLE SourceProcessHandle,
@@ -578,7 +574,6 @@ NTSTATUS
 
 #pragma region ZwEnumerateKey
 DEFZwEnumerateKey OldZwEnumerateKey= NULL;
-
 NTSTATUS 
   NewZwEnumerateKey(
     IN HANDLE  KeyHandle,
@@ -730,7 +725,7 @@ NTSTATUS
     )
 {
 	SeeUser();
-	DbgPrint("ZwFreeVirtualMemory\n")
+	DbgPrint("ZwFreeVirtualMemory\n");
 	OldZwFreeVirtualMemory(
 		ProcessHandle,
 		BaseAddress,
@@ -1105,7 +1100,7 @@ NTSTATUS
     )
 {
 	SeeUser();
-	DbgPrint("ZwOpenKeyTransacted\n);
+	DbgPrint("ZwOpenKeyTransacted\n");
 	return OldZwOpenKeyTransacted(
 		KeyHandle,
 		DesiredAccess,
@@ -1130,7 +1125,7 @@ NTSTATUS
     )
 {
 	SeeUser();
-	DbgPrint("ZwOpenKeyTransactedEx\n);
+	DbgPrint("ZwOpenKeyTransactedEx\n");
 	return OldZwOpenKeyTransactedEx(
 		KeyHandle,
 		DesiredAccess,
@@ -1143,8 +1138,7 @@ NTSTATUS
 #pragma endregion
 
 #pragma region ZwOpenProcess
-
-ZWOPENPROCESS OldZwOpenProcess= NULL;
+DEFZwOpenProcess OldZwOpenProcess= NULL;
 
 NTSTATUS NewZwOpenProcess(OUT PHANDLE ProcessHandle,IN ACCESS_MASK DesiredAccess,IN POBJECT_ATTRIBUTES ObjectAttributes,IN PCLIENT_ID ClientId OPTIONAL)
 {
@@ -1155,9 +1149,7 @@ NTSTATUS NewZwOpenProcess(OUT PHANDLE ProcessHandle,IN ACCESS_MASK DesiredAccess
 #pragma endregion
 
 #pragma region ZwOpenProcessTokenEx
-
 DEFZwOpenProcessTokenEx OldZwOpenProcessTokenEx= NULL;
-
 NTSTATUS
   NewZwOpenProcessTokenEx(
     IN HANDLE  ProcessHandle,
@@ -1312,7 +1304,7 @@ NTSTATUS
     __in_opt PUNICODE_STRING  LogFileName,
     __in_opt LPGUID  TmIdentity,
     __in_opt ULONG  OpenOptions
-    );
+    )
 {
 	SeeUser();
 	DbgPrint("ZwOpenTransactionManager\n");
@@ -1399,7 +1391,7 @@ NTSTATUS
     )
 {
 	SeeUser();
-	DbgPrint();
+	DbgPrint("NewZwPrePrepareEnlistment");
 	return OldZwPrePrepareEnlistment (
 		EnlistmentHandle,
 		TmVirtualClock
@@ -1650,7 +1642,7 @@ NTSTATUS
 
 #pragma region ZwQueryObject
 
-DEFZwQueryObject OldZwQueryObject = NULL;
+DEFZwQueryObject OldZwQueryObject= NULL;
 
 NTSTATUS
   NewZwQueryObject(
@@ -1736,8 +1728,7 @@ NTSTATUS
 
 #pragma region ZwQuerySymbolicLinkObject
 
-DEFZwQuerySymbolicLinkObject OldZwQuerySymbolicLinkObject = NUll;
-
+DEFZwQuerySymbolicLinkObject OldZwQuerySymbolicLinkObject= NULL;
 NTSTATUS
   NewZwQuerySymbolicLinkObject(
     IN HANDLE  LinkHandle,
@@ -1811,17 +1802,213 @@ NTSTATUS
 #pragma endregion
 
 
+/*
+* 添加时间：2011年1月2日 23:44:50
+* By:Cooolie
+*/
 
+DEFZwReadFile OldZwReadFile=NULL;
+NTSTATUS 
+NewZwReadFile(
+		   IN HANDLE  FileHandle,
+		   IN HANDLE  Event  OPTIONAL,
+		   IN PIO_APC_ROUTINE  ApcRoutine  OPTIONAL,
+		   IN PVOID  ApcContext  OPTIONAL,
+		   OUT PIO_STATUS_BLOCK  IoStatusBlock,
+		   OUT PVOID  Buffer,
+		   IN ULONG  Length,
+		   IN PLARGE_INTEGER  ByteOffset  OPTIONAL,
+		   IN PULONG  Key  OPTIONAL
+		   )
+{
+	   SeeUser();
+	   DbgPrint("ZwReadFile\n");
+	   return OldZwReadFile(FileHandle,Event,ApcRoutine,ApcContext,IoStatusBlock,Buffer,Length,ByteOffset,Key);
+}
 
+DEFZwSetEvent OldZwSetEvent=NULL; 
+NTSTATUS
+NewZwSetEvent(
+		   __in HANDLE  EventHandle,
+		   __out_opt PLONG  PreviousState 
+		   )
+{
+	SeeUser();
+	DbgPrint("NewZwSetEvent\n");
+	return OldZwSetEvent(EventHandle,PreviousState);
+}
 
+DEFZwSetInformationFile OldZwSetInformationFile=NULL;
+NTSTATUS 
+NewZwSetInformationFile(
+					 IN HANDLE  FileHandle,
+					 OUT PIO_STATUS_BLOCK  IoStatusBlock,
+					 IN PVOID  FileInformation,
+					 IN ULONG  Length,
+					 IN FILE_INFORMATION_CLASS  FileInformationClass
+					 )
+{
+	SeeUser();
+	DbgPrint("NewZwSetInformationFile\n");
+	return OldZwSetInformationFile(FileHandle,IoStatusBlock,FileInformation,Length,FileInformationClass);
+}
 
+DEFZwSetInformationThread OldZwSetInfomationThread=NULL;
+NTSTATUS 
+NewZwSetInformationThread(
+					   IN HANDLE  ThreadHandle,
+					   IN THREADINFOCLASS  ThreadInformationClass,
+					   IN PVOID  ThreadInformation,
+					   IN ULONG  ThreadInformationLength
+					   )
+{
+	SeeUser();
+	DbgPrint("NewZwSetInformationThread\n");
+	OldZwSetInfomationThread(ThreadHandle,ThreadInformationLength,ThreadInformation,ThreadInformationLength);
+}
 
+DEFZwSetInformationToken OldZwSetInformationToken=NULL;
+NTSTATUS
+NewZwSetInformationToken(
+					  IN HANDLE  TokenHandle,
+					  IN TOKEN_INFORMATION_CLASS  TokenInformationClass,
+					  IN PVOID  TokenInformation,
+					  IN ULONG  TokenInformationLength
+					  )
+{
+	SeeUser();
+	DbgPrint("ZwSetInformationToken\n");
+	return OldZwSetInformationToken(TokenHandle,TokenInformationClass,TokenInformation,TokenInformationLength);
+}
 
+/*Win7有效*/
+DEFZwSetQuotaInformationFile OldZwSetQuotaInformationFile=NULL;
+NTSTATUS
+ZwSetQuotaInformationFile(
+						  __in HANDLE  FileHandle,
+						  __out PIO_STATUS_BLOCK  IoStatusBlock,
+						  __in_bcount(Length) PVOID  Buffer,
+						  __in ULONG  Length
+						  )
+{
+	SeeUser();
+	DbgPrint("ZwSetQuotaInformationFile\n");
+	return OldZwSetQuotaInformationFile(FileHandle,IoStatusBlock,Buffer,Length);
+}
 
+/*>=Xp*/
+DEFZwSetSecurityObject OldZwSetSecurityObject=NULL;
+NTSTATUS
+NewZwSetSecurityObject(
+					IN HANDLE  Handle,
+					IN SECURITY_INFORMATION  SecurityInformation,
+					IN PSECURITY_DESCRIPTOR  SecurityDescriptor
+					)
+{
+	SeeUser();
+	DbgPrint("ZwSetSecurityObject\n");
+	return OldZwSetSecurityObject(Handle,SecurityInformation,SecurityDescriptor);
+}
 
+DEFZwSetValueKey OldZwSetValueKey=NULL;
+NTSTATUS 
+NewZwSetValueKey(
+			  IN HANDLE  KeyHandle,
+			  IN PUNICODE_STRING  ValueName,
+			  IN ULONG  TitleIndex  OPTIONAL,
+			  IN ULONG  Type,
+			  IN PVOID  Data,
+			  IN ULONG  DataSize
+			  )
+{
+	SeeUser();
+	DbgPrint("ZwSetValueKey\n");
+	OldZwSetValueKey(KeyHandle,ValueName,TitleIndex,Type,Data,DataSize);
+}
 
+/*>=2003*/
+DEFZwSetVolumeInformationFile OldZwSetVolumeInformationFile=NULL;
+NTSTATUS
+NewZwSetVolumeInformationFile(
+						   IN HANDLE  FileHandle,
+						   OUT PIO_STATUS_BLOCK  IoStatusBlock,
+						   IN PVOID  FsInformation,
+						   IN ULONG  Length,
+						   IN FS_INFORMATION_CLASS  FsInformationClass
+						   )
+{
+	SeeUser();
+	DbgPrint("ZwSetVolumeInformationFile\n");
+	return OldZwSetVolumeInformationFile(FileHandle,IoStatusBlock,FsInformation,Length,FsInformationClass);
+}
 
+DEFZwTerminateProcess OldZwTerminateProcess=NULL;
+NTSTATUS
+NewZwTerminateProcess(
+				   IN HANDLE  ProcessHandle,
+				   IN NTSTATUS  ExitStatus
+				   )
+{
+	SeeUser();
+	DbgPrint("ZwTerminateProcess\n");
+	return OldZwTerminateProcess(ProcessHandle,ExitStatus);
+}
 
+/*>=Xp*/
+DEFZwUnloadDriver OldZwUnloadDriver=NULL;
+NTSTATUS 
+NewZwUnloadDriver(
+			   IN PUNICODE_STRING  DriverServiceName
+			   )
+{
+	SeeUser();
+	DbgPrint("ZwUnloadDriver\n");
+	OldZwUnloadDriver(DriverServiceName);
+}
+
+DEFZwUnmapViewOfSection OldZwUnmapViewOfSection=NULL;
+NTSTATUS 
+NewZwUnmapViewOfSection(
+					 IN HANDLE  ProcessHandle,
+					 IN PVOID  BaseAddress
+					 )
+{
+	SeeUser();
+	DbgPrint("ZwUnmapViewOfSection\n");
+	OldZwUnmapViewOfSection(ProcessHandle,BaseAddress);
+}
+
+/*>=Xp*/
+DEFZwWaitForSingleObject OldZwWaitForSingleObject=NULL;
+NTSTATUS
+NewZwWaitForSingleObject(
+					  __in HANDLE  Handle,
+					  __in BOOLEAN  Alertable,
+					  __in_opt PLARGE_INTEGER  Timeout
+					  )
+{
+	SeeUser();
+	DbgPrint("ZwWaitForSingleObject\n");
+	OldZwWaitForSingleObject(Handle,Alertable,Timeout);
+}
+DEFZwWriteFile OldZwWriteFile=NULL;
+NTSTATUS 
+NewZwWriteFile(
+			IN HANDLE  FileHandle,
+			IN HANDLE  Event  OPTIONAL,
+			IN PIO_APC_ROUTINE  ApcRoutine  OPTIONAL,
+			IN PVOID  ApcContext  OPTIONAL,
+			OUT PIO_STATUS_BLOCK  IoStatusBlock,
+			IN PVOID  Buffer,
+			IN ULONG  Length,
+			IN PLARGE_INTEGER  ByteOffset  OPTIONAL,
+			IN PULONG  Key  OPTIONAL
+			)
+{
+	SeeUser();
+	DbgPrint("ZwWriteFile\n");
+	OldZwWriteFile(FileHandle,Event,ApcRoutine,ApcContext,IoStatusBlock,Buffer,Length,ByteOffset,Key);
+}
 
 
 
@@ -1873,6 +2060,7 @@ NTSTATUS Dispatch(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 	IoCompleteRequest(Irp, IO_NO_INCREMENT);
 	return ntstatus;
 }
+
 
 VOID Unload(IN PDRIVER_OBJECT DriverObject)
 {
@@ -1939,10 +2127,10 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING Registry
 		DbgPrint("initmdl faild\n");
 		return ntstatus;
 	}
-	OldZwOpenProcess= (ZWOPENPROCESS)(SYSTEMSERVICE(ZwOpenProcess));
+	OldZwOpenProcess= (DEFZwOpenProcess)(SYSTEMSERVICE(ZwOpenProcess));
 
 	__asm cli;
-	HOOK_SYSCALL(ZwOpenProcess, NewZwOpenProcess, OldZwOpenProcess);
+	HOOK_SYSCALL(ZwOpenProcess,NewZwOpenProcess,OldZwOpenProcess);
 	__asm sti;
 	DbgPrint("hook_create ok\n");
 
