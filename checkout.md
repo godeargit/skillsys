@@ -1,0 +1,1 @@
+svn checkout https://skillsys.googlecode.com/svn/trunk/skillsys skillsysreadonly
